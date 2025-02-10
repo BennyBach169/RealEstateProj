@@ -18,7 +18,7 @@ public class Property {
     @Enumerated(EnumType.STRING)
     private PropertyStatus propertyStatus;
     @ManyToOne
-    @JoinColumn(name = "property_type_id") // Foreign key to PropertyType
+    @JoinColumn(name = "property_type_id")
     private PropertyType propertyType;
 
     public Property() {
