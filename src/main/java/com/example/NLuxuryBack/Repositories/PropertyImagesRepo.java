@@ -1,7 +1,12 @@
 package com.example.NLuxuryBack.Repositories;
 
-import com.example.NLuxuryBack.beans.PropertyImages;
+import com.example.NLuxuryBack.beans.PropertyImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PropertyImagesRepo extends JpaRepository<PropertyImages,Integer> {
+import java.util.List;
+
+public interface PropertyImagesRepo extends JpaRepository<PropertyImage,Integer> {
+    List<PropertyImage> findByPropertyId(int propertyId);
+    PropertyImage findByPropertyIdAndIsPrimaryTrue(int propertyId);
+
 }
