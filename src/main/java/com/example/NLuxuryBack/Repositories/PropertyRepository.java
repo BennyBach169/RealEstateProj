@@ -1,5 +1,8 @@
 package com.example.NLuxuryBack.Repositories;
 
-public interface PropertyRepository {
+import com.example.NLuxuryBack.beans.Property;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PropertyRepository extends JpaRepository<Property,Integer> {
 
 }
