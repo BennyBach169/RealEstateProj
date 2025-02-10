@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "properties")
 public class Property {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
+    private String description;
     private int bedrooms;
     private int rooms;
     private int bathrooms;
@@ -22,13 +24,17 @@ public class Property {
     public Property() {
     }
 
-    public Property(String title, int bedrooms, int rooms, int bathrooms, int sqm, int builtSqm, PropertyType propertyType) {
+
+    public Property(int id, String title, String description, int bedrooms, int rooms, int bathrooms, int sqm, int builtSqm, PropertyStatus propertyStatus, PropertyType propertyType) {
+        this.id = id;
         this.title = title;
+        this.description = description;
         this.bedrooms = bedrooms;
         this.rooms = rooms;
         this.bathrooms = bathrooms;
         this.sqm = sqm;
         this.builtSqm = builtSqm;
+        this.propertyStatus = propertyStatus;
         this.propertyType = propertyType;
     }
 
@@ -94,6 +100,22 @@ public class Property {
 
     public void setPropertyType(PropertyType propertyType) {
         this.propertyType = propertyType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public PropertyStatus getPropertyStatus() {
+        return propertyStatus;
+    }
+
+    public void setPropertyStatus(PropertyStatus propertyStatus) {
+        this.propertyStatus = propertyStatus;
     }
 
     @Override
