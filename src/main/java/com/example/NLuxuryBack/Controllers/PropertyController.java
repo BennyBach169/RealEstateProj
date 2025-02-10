@@ -1,4 +1,4 @@
-package com.example.NLuxuryBack;
+package com.example.NLuxuryBack.Controllers;
 
 import com.example.NLuxuryBack.beans.Property;
 import com.example.NLuxuryBack.beans.PropertyImage;
