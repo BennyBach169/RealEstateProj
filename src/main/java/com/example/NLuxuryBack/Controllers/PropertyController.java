@@ -4,16 +4,14 @@ import com.example.NLuxuryBack.beans.Property;
 import com.example.NLuxuryBack.beans.PropertyImage;
 import com.example.NLuxuryBack.services.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
+@CrossOrigin("*")
 public class PropertyController {
     @Autowired
     private PropertyService propertyService;
@@ -33,8 +31,10 @@ public class PropertyController {
     public List<PropertyImage> getAllImages(@PathVariable int id){
         return propertyService.getAllPropertyImages(id);
     }
+
     @GetMapping("/primaryimage/{id}")
     public PropertyImage getPrimaryImage(@PathVariable int id){
         return propertyService.getPropertiesPrimaryImage(id);
     }
+
 }

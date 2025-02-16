@@ -19,9 +19,9 @@ public class NLuxuryBackApplication {
 		S3Service s3Service =ctx.getBean(S3Service.class);
 
         try {
-            Path imagePath = Paths.get("C:\\Users\\afibe\\OneDrive\\Desktop\\blabla.png");
-            String fileUrl = s3Service.uploadFile(imagePath,"uploads/blabla.png");
-            System.out.println("File uploaded to: " + fileUrl);
+//            Path imagePath = Paths.get("C:\\Users\\afibe\\OneDrive\\Desktop\\blabla.png");
+//            String fileUrl = s3Service.uploadFile(imagePath,"uploads/blabla.png");
+//            System.out.println("File uploaded to: " + fileUrl);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

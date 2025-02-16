@@ -15,6 +15,7 @@ public class Property {
     private int bathrooms;
     private int sqm;
     private int builtSqm;
+    private int price;
     @Enumerated(EnumType.STRING)
     private PropertyStatus propertyStatus;
     @ManyToOne
@@ -34,6 +35,20 @@ public class Property {
         this.bathrooms = bathrooms;
         this.sqm = sqm;
         this.builtSqm = builtSqm;
+        this.propertyStatus = propertyStatus;
+        this.propertyType = propertyType;
+    }
+
+    public Property(int id, String title, String description, int bedrooms, int rooms, int bathrooms, int sqm, int builtSqm, int price, PropertyStatus propertyStatus, PropertyType propertyType) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.bedrooms = bedrooms;
+        this.rooms = rooms;
+        this.bathrooms = bathrooms;
+        this.sqm = sqm;
+        this.builtSqm = builtSqm;
+        this.price = price;
         this.propertyStatus = propertyStatus;
         this.propertyType = propertyType;
     }
@@ -118,16 +133,27 @@ public class Property {
         this.propertyStatus = propertyStatus;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Property{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 ", bedrooms=" + bedrooms +
                 ", rooms=" + rooms +
                 ", bathrooms=" + bathrooms +
                 ", sqm=" + sqm +
                 ", builtSqm=" + builtSqm +
+                ", price=" + price +
+                ", propertyStatus=" + propertyStatus +
                 ", propertyType=" + propertyType +
                 '}';
     }
