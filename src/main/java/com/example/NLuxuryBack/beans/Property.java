@@ -9,6 +9,7 @@ public class Property {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
+    @Column(length = 5000)
     private String description;
     private int bedrooms;
     private int rooms;
@@ -16,6 +17,7 @@ public class Property {
     private int sqm;
     private int builtSqm;
     private int price;
+    private String location;
     @Enumerated(EnumType.STRING)
     private PropertyStatus propertyStatus;
     @ManyToOne
@@ -26,20 +28,7 @@ public class Property {
     }
 
 
-    public Property(int id, String title, String description, int bedrooms, int rooms, int bathrooms, int sqm, int builtSqm, PropertyStatus propertyStatus, PropertyType propertyType) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.bedrooms = bedrooms;
-        this.rooms = rooms;
-        this.bathrooms = bathrooms;
-        this.sqm = sqm;
-        this.builtSqm = builtSqm;
-        this.propertyStatus = propertyStatus;
-        this.propertyType = propertyType;
-    }
-
-    public Property(int id, String title, String description, int bedrooms, int rooms, int bathrooms, int sqm, int builtSqm, int price, PropertyStatus propertyStatus, PropertyType propertyType) {
+    public Property(int id, String title, String description, int bedrooms, int rooms, int bathrooms, int sqm, int builtSqm, int price, String location, PropertyStatus propertyStatus, PropertyType propertyType) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -49,6 +38,7 @@ public class Property {
         this.sqm = sqm;
         this.builtSqm = builtSqm;
         this.price = price;
+        this.location = location;
         this.propertyStatus = propertyStatus;
         this.propertyType = propertyType;
     }
@@ -139,6 +129,14 @@ public class Property {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
