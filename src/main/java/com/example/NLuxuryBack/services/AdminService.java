@@ -21,7 +21,7 @@ import java.util.UUID;
 public class AdminService {
 
     @Autowired
-    private PropertyRepository propertyRepository; // Assuming the same repository for Property management
+    private PropertyRepository propertyRepository;
     @Autowired
     private PropertyTypeRepo propertyTypeRepo;
     @Autowired
@@ -29,18 +29,17 @@ public class AdminService {
     @Autowired
     private S3Service s3Service;
 
-    // Get all properties (for admin view)
+
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
     }
 
-    // Get a single property by ID
+
     public Property getOneProperty(int id) throws SQLException {
         return propertyRepository.findById(id)
                 .orElseThrow(() -> new SQLException("Property not found by id: " + id));
     }
 
-    // Update an existing property
     public Property updateProperty(Property property) throws SQLException {
         if (property.getId() == 0) {
             throw new SQLException("Property ID must be provided for update");
@@ -51,7 +50,7 @@ public class AdminService {
         return propertyRepository.save(property);
     }
 
-    // Delete a property by ID
+
     public void deleteProperty(int id) throws SQLException {
         if (!propertyRepository.existsById(id)) {
             throw new SQLException("Property not found by id: " + id);
@@ -59,10 +58,10 @@ public class AdminService {
         propertyRepository.deleteById(id);
     }
 
-    // Add a new property
+
     public Property addProperty(Property property) {
-        // Ensure the ID is not set (let the database auto-generate it)
-        property.setId(0); // Or null, depending on your entity setup
+
+        property.setId(0);
         return propertyRepository.save(property);
     }
 
@@ -80,37 +79,37 @@ public class AdminService {
     }
 
     public PropertyImage uploadPropertyImage(int propertyId, MultipartFile file) throws IOException, SQLException {
-        // Validate property exists
+
         Property property = propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new SQLException("Property not found by id: " + propertyId));
 
-        // Convert MultipartFile to temporary File for S3 upload
+
         File tempFile = convertMultipartFileToFile(file);
         try {
-            // Generate a unique key for the S3 object (e.g., "properties/{propertyId}/images/{uuid}.jpg")
+
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             String keyName = "properties/" + propertyId + "/images/" + fileName;
 
-            // Upload to S3 and get the URL
+
             String imageUrl = s3Service.uploadFile(tempFile.toPath(), keyName);
 
-            // Create or update PropertyImage entity
+
             PropertyImage propertyImage = new PropertyImage();
             propertyImage.setProperty(property);
             propertyImage.setImage(imageUrl);
             propertyImage.setIsPrimary(false);
 
-            // Save to database
+
             return propertyImagesRepo.save(propertyImage);
         } finally {
-            // Clean up temporary file
+
             if (tempFile.exists()) {
                 tempFile.delete();
             }
         }
     }
 
-    // Helper method to convert MultipartFile to File
+
     private File convertMultipartFileToFile(MultipartFile file) throws IOException {
         File tempFile = File.createTempFile("upload-", file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
@@ -123,7 +122,7 @@ public class AdminService {
         PropertyImage propertyImage = propertyImagesRepo.findById(imageId)
                 .orElseThrow(() -> new SQLException("Property image not found by id: " + imageId));
 
-        // Delete the file from S3 using the key extracted from the image URL
+
         String imageUrl = propertyImage.getImage();
         if (imageUrl != null) {
             String s3Key = extractS3KeyFromUrl(imageUrl);
@@ -132,16 +131,16 @@ public class AdminService {
                     s3Service.deleteFile(s3Key);
                 } catch (Exception e) {
                     System.err.println("Failed to delete image from S3: " + e.getMessage());
-                    // Optionally rethrow or log more details, but continue with DB deletion
+
                 }
             }
         }
 
-        // Delete the PropertyImage from the database
+
         propertyImagesRepo.deleteById(imageId);
     }
 
-    // Helper method to extract S3 key from URL (already defined, just referenced)
+
     private String extractS3KeyFromUrl(String imageUrl) {
         if (imageUrl == null || !imageUrl.contains("/properties/")) return null;
         String[] parts = imageUrl.split("/properties/");
