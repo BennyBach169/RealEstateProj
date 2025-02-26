@@ -98,7 +98,7 @@ public class AdminService {
             PropertyImage propertyImage = new PropertyImage();
             propertyImage.setProperty(property);
             propertyImage.setImage(imageUrl);
-            propertyImage.setPrimary(false);
+            propertyImage.setIsPrimary(false);
 
             // Save to database
             return propertyImagesRepo.save(propertyImage);
@@ -118,4 +118,57 @@ public class AdminService {
         }
         return tempFile;
     }
+
+    public void deletePropertyImage(int imageId) throws SQLException {
+        PropertyImage propertyImage = propertyImagesRepo.findById(imageId)
+                .orElseThrow(() -> new SQLException("Property image not found by id: " + imageId));
+
+        // Delete the file from S3 using the key extracted from the image URL
+        String imageUrl = propertyImage.getImage();
+        if (imageUrl != null) {
+            String s3Key = extractS3KeyFromUrl(imageUrl);
+            if (s3Key != null) {
+                try {
+                    s3Service.deleteFile(s3Key);
+                } catch (Exception e) {
+                    System.err.println("Failed to delete image from S3: " + e.getMessage());
+                    // Optionally rethrow or log more details, but continue with DB deletion
+                }
+            }
+        }
+
+        // Delete the PropertyImage from the database
+        propertyImagesRepo.deleteById(imageId);
+    }
+
+    // Helper method to extract S3 key from URL (already defined, just referenced)
+    private String extractS3KeyFromUrl(String imageUrl) {
+        if (imageUrl == null || !imageUrl.contains("/properties/")) return null;
+        String[] parts = imageUrl.split("/properties/");
+        if (parts.length > 1) {
+            return "properties/" + parts[1];
+        }
+        return null;
+    }
+
+    public void setPrimaryImage(PropertyImage propertyImage) throws SQLException {
+        if (propertyImage == null || propertyImage.getProperty().getId() == 0) {
+            throw new SQLException("Invalid PropertyImage or propertyId provided");
+        }
+
+        int propertyId = propertyImage.getProperty().getId();
+
+        PropertyImage currentPrimaryImage = propertyImagesRepo.findByPropertyIdAndIsPrimaryTrue(propertyId);
+        if (currentPrimaryImage != null) {
+            if (currentPrimaryImage.getId()!=propertyImage.getId()) {
+                currentPrimaryImage.setIsPrimary(false);
+                propertyImagesRepo.save(currentPrimaryImage);
+            }
+        }
+
+        propertyImage.setIsPrimary(true);
+        propertyImagesRepo.save(propertyImage);
+    }
+
+
 }

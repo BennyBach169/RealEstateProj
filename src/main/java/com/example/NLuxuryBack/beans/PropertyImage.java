@@ -1,5 +1,7 @@
 package com.example.NLuxuryBack.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class PropertyImage {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
     private String image;
+    @JsonProperty("isPrimary")
     private boolean isPrimary;
     @ManyToOne
     private Property property;
@@ -43,8 +46,8 @@ public class PropertyImage {
         return isPrimary;
     }
 
-    public void setPrimary(boolean primary) {
-        isPrimary = primary;
+    public void setIsPrimary(boolean isPrimary) {
+        this.isPrimary = isPrimary;
     }
 
     public Property getProperty() {

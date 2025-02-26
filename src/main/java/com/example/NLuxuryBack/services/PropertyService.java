@@ -34,7 +34,12 @@ public class PropertyService {
         return propertyImagesRepo.findByPropertyId(id);
     }
 
-    public PropertyImage getPropertiesPrimaryImage(int id){
-        return propertyImagesRepo.findByPropertyIdAndIsPrimaryTrue(id);
+    public PropertyImage getPrimaryImage(int propertyId){
+        PropertyImage propertyImage =propertyImagesRepo.findByPropertyIdAndIsPrimaryTrue(propertyId);
+        if(propertyImage!=null){
+            return propertyImage;
+        }
+        return null;
     }
+
 }

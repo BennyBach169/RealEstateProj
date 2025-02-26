@@ -56,4 +56,16 @@ public class AdminController {
             @RequestParam("file") MultipartFile file) throws IOException, SQLException {
         return adminService.uploadPropertyImage(propertyId, file);
     }
+
+    @DeleteMapping("/properties/images/{imageId}")
+    public void deletePropertyImage(@PathVariable int imageId) throws SQLException {
+        adminService.deletePropertyImage(imageId);
+    }
+
+    @PutMapping("/properties/images/primary")
+    public void setPrimaryImage(@RequestBody PropertyImage propertyImage) throws SQLException {
+        adminService.setPrimaryImage(propertyImage);
+    }
+
+
 }

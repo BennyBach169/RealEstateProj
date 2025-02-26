@@ -32,9 +32,11 @@ public class PropertyController {
         return propertyService.getAllPropertyImages(id);
     }
 
-    @GetMapping("/primaryimage/{id}")
-    public PropertyImage getPrimaryImage(@PathVariable int id){
-        return propertyService.getPropertiesPrimaryImage(id);
+
+
+    @GetMapping("/primaryimage/{propertyId}")
+    public PropertyImage getPrimaryPropertyImage(@PathVariable int propertyId) throws SQLException {
+        return propertyService.getPrimaryImage(propertyId);
     }
 
 }
