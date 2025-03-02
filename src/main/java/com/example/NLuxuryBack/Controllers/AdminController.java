@@ -35,11 +35,6 @@ public class AdminController {
         return adminService.updateProperty(property);
     }
 
-    @DeleteMapping("/properties/{id}")
-    public void deleteProperty(@PathVariable int id) throws SQLException {
-        adminService.deleteProperty(id);
-    }
-
     @PostMapping("/properties")
     public Property addProperty(@RequestBody Property property) {
         return adminService.addProperty(property);
@@ -65,6 +60,11 @@ public class AdminController {
     @PutMapping("/properties/images/primary")
     public void setPrimaryImage(@RequestBody PropertyImage propertyImage) throws SQLException {
         adminService.setPrimaryImage(propertyImage);
+    }
+
+    @DeleteMapping("/properties/{propertyId}")
+    public void deletePropertyWithImages(@PathVariable int propertyId) throws SQLException {
+        adminService.deletePropertyWithImages(propertyId);
     }
 
 

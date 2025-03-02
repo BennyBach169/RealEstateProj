@@ -51,12 +51,7 @@ public class AdminService {
     }
 
 
-    public void deleteProperty(int id) throws SQLException {
-        if (!propertyRepository.existsById(id)) {
-            throw new SQLException("Property not found by id: " + id);
-        }
-        propertyRepository.deleteById(id);
-    }
+
 
 
     public Property addProperty(Property property) {
@@ -167,6 +162,35 @@ public class AdminService {
 
         propertyImage.setIsPrimary(true);
         propertyImagesRepo.save(propertyImage);
+    }
+
+    public void deletePropertyWithImages(int propertyId) throws SQLException {
+
+        Property property = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new SQLException("Property not found by id: " + propertyId));
+
+
+        List<PropertyImage> images = propertyImagesRepo.findByPropertyId(propertyId);
+
+
+        for (PropertyImage image : images) {
+            String imageUrl = image.getImage();
+            if (imageUrl != null) {
+                String s3Key = extractS3KeyFromUrl(imageUrl);
+                if (s3Key != null) {
+                    try {
+                        s3Service.deleteFile(s3Key);
+                    } catch (Exception e) {
+                        System.err.println("Failed to delete image from S3: " + e.getMessage());
+
+                    }
+                }
+            }
+            propertyImagesRepo.deleteById(image.getId());
+        }
+
+
+        propertyRepository.deleteById(propertyId);
     }
 
 
